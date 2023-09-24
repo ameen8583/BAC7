@@ -1,0 +1,41 @@
+import sys
+
+n = 4  
+j = 1
+
+input_data = """
+0 13 21 22
+13 0 12 13
+21 12 0 13
+22 13 13 0
+"""
+
+# Split the input data into rows
+rows = input_data.strip().split('\n')
+dist_matrix = []
+
+for row in rows:
+    values = [int(x) for x in row.strip().split()]
+    dist_matrix.append(values)
+
+
+class LimbLength:
+    def __init__(self, n, j, distMatrix):
+        limbLength = self.LimbLength(n, j, distMatrix)
+        print(limbLength)
+
+    def LimbLength(self, n, j, distMatrix):
+        limbLength = float('inf') #initialize the variable limbLength to positive infinity
+        if j > 0: 
+            i = j - 1
+        else:
+            i = j + 1
+        for k in range(n):
+            if i != k and k != j:
+                currLength = (distMatrix[i][j] + distMatrix[j][k] - distMatrix[i][k]) // 2
+                if currLength < limbLength:
+                    limbLength = currLength
+        return limbLength
+  
+
+LimbLength(n, j, dist_matrix)
