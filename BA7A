@@ -1,1 +1,44 @@
+The file contains the Python codes to solve problem 7A, each code uses Floyd-Warshall Algorithm to calculate the distances.
 
+
+# Input format: n=integer followed by edges in the format u->v:w from the adjacency tree given
+input_str = """n=integer
+0->32:9
+1->41:13
+..."""
+
+# Parse input to extract n and edges
+input_lines = input_str.strip().split('\n')
+n = int(input_lines[0].split('=')[1])
+edges = []
+
+for line in input_lines[1:]:
+    u, rest = line.split('->')
+    v, w = rest.split(':')
+    edges.append((int(u), int(v), int(w)))
+
+# Determine the maximum node index
+max_node_index = max(max(u, v) for u, v, w in edges)
+
+# Create a matrix to store the distances between nodes
+# Initialize with infinity for unreachable pairs and 0 for the diagonal (node to itself)
+distances = [[float('inf')] * (max_node_index + 1) for _ in range(max_node_index + 1)]
+for i in range(max_node_index + 1):
+    distances[i][i] = 0
+
+# Populate the matrix with edge weights
+for u, v, w in edges:
+    distances[u][v] = w
+
+# Floyd-Warshall algorithm to calculate distances
+for k in range(max_node_index + 1):
+    for i in range(max_node_index + 1):
+        for j in range(max_node_index + 1):
+            if distances[i][j] > distances[i][k] + distances[k][j]:
+                distances[i][j] = distances[i][k] + distances[k][j]
+
+# Print the distances between all pairs of nodes
+for i in range(n):
+    for j in range(n):
+        print(distances[i][j], end=' ')
+    print()
